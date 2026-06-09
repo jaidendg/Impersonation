@@ -148,7 +148,8 @@ DWORD find_lsass_procid(void)
     return lsass_procid;
 }
 
-BOOL enable_debug_privilege(void) {
+BOOL enable_debug_privilege(void)
+{
     HANDLE hToken;
     TOKEN_PRIVILEGES tp;
     LUID luid;
